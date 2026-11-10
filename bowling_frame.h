@@ -7,10 +7,13 @@ class Bowling_Frame
 	private:
 		int score1_;
 		int score2_;
+		int score3_;
+
 		bool strike_;
 		bool spare_;
 		bool roll_one_;
 		bool roll_two_;
+		bool roll_three_;
 
 		int total_score_;
 		int frame_num_;
@@ -24,20 +27,24 @@ class Bowling_Frame
 		Bowling_Frame(int fnum);
 		~Bowling_Frame();
 
-		Bowling_Frame* next_frame(); 	
+		Bowling_Frame* next_frame();
 		void next_frame(Bowling_Frame * new_frame);
 
-		Bowling_Frame* prev_frame(); 	
+		Bowling_Frame* prev_frame();
 		void prev_frame(Bowling_Frame * new_frame);
 
 		int score1();
 		void score1(int score);
 		int score2();
 		void score2(int score);
+		int score3();
+		void score3(int score);
+
 		bool strike();
 		void strike(bool value);
 		bool spare();
 		void spare(bool value);
+
 		int frame_num();
 		int frame_score();
 		void update_scores();
