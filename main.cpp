@@ -2,6 +2,9 @@
 #include "bowling_frame.h"
 #include <random>
 
+//for atoi//
+#include <cstdlib>
+
 using namespace std;
 
 std::random_device dev_main;
@@ -20,8 +23,97 @@ int current_game_total(Bowling_Frame * first_frame)
 	return game_total;	
 }
 
-int main()
+//added command-line arguments//
+int main(int argc, char *argv[])
 {
+    //throws error if user doesn't provide # of players//
+    if (argc != 2) 
+    {
+        cout << "An error occurred. Please provide the number of players." << endl;
+        return 1;
+    }
+
+    //coverts argument to an integer//
+    int num_players = atoi(argv[1]);
+
+    //throws error if user provides invalid # of players//
+    if (num_players <= 0)
+    {
+        cout << "An error occurred. Please provide a valid number of players." << endl;
+        return 1;
+    }
+
+    //creates array of Bowling_Frame pointers for each player//
+    Bowling_Frame ** players = new Bowling_Frame*[num_players];
+
+    //creates frames for each player//
+    for (int i = 0; i < num_players; i++)
+    {
+        //first frame//
+        players[i] = new Bowling_Frame(1);
+
+        //current frame//
+        Bowling_Frame * current = players[i];
+
+        //remaining 9 frames//
+        for (int j = 2; j <= 10; j++)
+        {
+            //creates next frame//
+            Bowling_Frame * next = new Bowling_Frame(j);
+
+            //link frames//
+            current->next_frame(next);
+            next->prev_frame(current);
+
+            //move to next frame//
+            current = next;
+        }
+    }
+
+    //populate frames with scores and update scores//
+    for (int i = 0; i < num_players; i++)
+    {
+        for (int j = 0; j < 21; j++)
+        {
+            players[i]->update_scores();
+        }
+    }
+
+    //print everything//
+    cout << "Player count is: " << num_players << endl;
+
+    for (int i = 0; i < num_players; i++)
+    {
+        cout << "\nPlayer " << i + 1 << " Stats:" << endl;
+
+        //creates pointer to traverse frames//
+        Bowling_Frame * traverse = players[i];
+
+        while (traverse)
+        {
+            cout << "Frame " << traverse->frame_num() << ":" << endl;
+            cout << " Score 1: " << traverse->score1() << endl;
+            cout << " Score 2: " << traverse->score2() << endl;
+
+            //adds third score for 10th frame if needed//
+            if (traverse->score3() > 0)
+            {
+                cout << " Score 3: " << traverse->score3() << endl;
+            }
+
+            //moves to next frame//
+            traverse = traverse->next_frame();
+        }
+
+        cout << endl;
+
+        cout << "Total Game Score for player " << i + 1 << ": " << current_game_total(players[i]) << endl;
+
+        cout << endl;
+    }
+
+    //OLD CODE//
+    /*
 	//make frames
 	Bowling_Frame * f1 = new Bowling_Frame(1);
 	Bowling_Frame * f2 = new Bowling_Frame(2);
@@ -73,5 +165,6 @@ int main()
 
 		traverse = traverse->next_frame();
 	}
+    */
 
 }
